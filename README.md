@@ -1,4 +1,3 @@
-# 🚀 Deploy on Hugging Face Spaces
 ---
 title: Diabetes Lifestyle Suggestor
 emoji: 🩺
