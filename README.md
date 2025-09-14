@@ -1,3 +1,13 @@
+# 🚀 Deploy on Hugging Face Spaces
+---
+title: Diabetes Lifestyle Suggestor
+emoji: 🩺
+colorFrom: blue
+colorTo: green
+sdk: streamlit
+app_file: app.py
+---
+
 # Diabetes Lifestyle Suggestor
 
 This project predicts diabetes risk and provides personalized lifestyle suggestions using a machine learning model and a Streamlit web app.
