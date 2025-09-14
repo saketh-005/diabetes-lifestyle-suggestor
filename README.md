@@ -40,7 +40,7 @@ This repo uses [Git LFS](https://git-lfs.github.com/) for large files like `.csv
 - `app.py`: Streamlit app for prediction and suggestions
 - `train_model.py`: Model training script
 - `analyze_dataset.py`: Data analysis script
-- `dataset/synthetic_amd_federated_dataset.csv`: Dataset
+- `synthetic_amd_federated_dataset.csv`: Dataset
 - `diabetes_risk_model.pkl`: Trained model (tracked with LFS)
 
 ## License

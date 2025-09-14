@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load dataset
-df = pd.read_csv('dataset/synthetic_amd_federated_dataset.csv')
+df = pd.read_csv('synthetic_amd_federated_dataset.csv')
 
 # Select features for diabetes risk prediction (example selection)
 features = [

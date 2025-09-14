@@ -5,7 +5,7 @@ import numpy as np
 
 # Load model and dataset
 model = joblib.load('diabetes_risk_model.pkl')
-df = pd.read_csv('dataset/synthetic_amd_federated_dataset.csv')
+df = pd.read_csv('synthetic_amd_federated_dataset.csv')
 
 st.title('Diabetes Risk Predictor & Lifestyle Suggestor')
 
