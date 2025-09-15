@@ -89,7 +89,7 @@ if st.sidebar.button('Predict Risk'):
     risk_prob = model.predict_proba(input_df)[0][1]
     risk_percent = risk_prob * 100
     st.subheader(f'Predicted Diabetes Risk Score: {risk_percent:.1f}%')
-    # Improved lifestyle suggestions
+    # Suggestions for every 10% risk increment
     suggestions = []
     bmi = input_df['BMI'][0]
     activity = input_df['Physical_Activity'][0]
@@ -99,26 +99,43 @@ if st.sidebar.button('Predict Risk'):
     cholesterol = input_df['Cholesterol'][0]
     age = input_df['Age'][0]
 
-    if risk_prob > 0.5:
-        if bmi >= 25:
-            suggestions.append('Aim for a BMI below 25 through healthy eating and regular exercise.')
-        if activity == 0:
-            suggestions.append('Increase physical activity. Try to get at least 150 minutes of moderate exercise per week.')
-        if hba1c > 6.0:
-            suggestions.append('Monitor and control your blood sugar. Consider consulting a dietitian.')
-        if family_history == 1:
-            suggestions.append('Since you have a family history, regular checkups are important.')
-        if hypertension == 1:
-            suggestions.append('Manage blood pressure with a low-salt diet and regular monitoring.')
-        if cholesterol > 200:
-            suggestions.append('Reduce cholesterol with a heart-healthy diet and physical activity.')
-        if age > 50:
-            suggestions.append('Schedule regular health screenings for diabetes and related conditions.')
-        suggestions.append('Consult a healthcare provider for a personalized plan.')
-        if not suggestions:
-            suggestions.append('Adopt a healthy lifestyle and monitor your health regularly.')
+    if risk_percent < 10:
+        suggestions.append('Excellent! Maintain your healthy lifestyle and regular checkups.')
+    elif risk_percent < 20:
+        suggestions.append('Keep up the good work. Stay active and eat a balanced diet.')
+    elif risk_percent < 30:
+        suggestions.append('Continue healthy habits. Monitor your BMI and blood sugar.')
+    elif risk_percent < 40:
+        suggestions.append('Consider increasing physical activity and monitoring blood sugar.')
+    elif risk_percent < 50:
+        suggestions.append('Pay attention to your diet and exercise. Schedule regular screenings.')
+    elif risk_percent < 60:
+        suggestions.append('Adopt a more active lifestyle. Reduce sugar and salt intake.')
+    elif risk_percent < 70:
+        suggestions.append('Consult a healthcare provider for personalized advice. Monitor blood pressure and cholesterol.')
+    elif risk_percent < 80:
+        suggestions.append('Take steps to control risk factors: BMI, blood sugar, cholesterol, and blood pressure.')
+    elif risk_percent < 90:
+        suggestions.append('High risk: Seek medical advice. Consider lifestyle changes and regular monitoring.')
     else:
-        suggestions.append('Continue your current healthy lifestyle. Maintain regular checkups and stay active.')
+        suggestions.append('Very high risk: Immediate medical attention recommended. Follow strict lifestyle modifications.')
+
+    # Add personalized suggestions based on input
+    if bmi >= 25:
+        suggestions.append('Aim for a BMI below 25 through healthy eating and regular exercise.')
+    if activity == 0:
+        suggestions.append('Increase physical activity. Try to get at least 150 minutes of moderate exercise per week.')
+    if hba1c > 6.0:
+        suggestions.append('Monitor and control your blood sugar. Consider consulting a dietitian.')
+    if family_history == 1:
+        suggestions.append('Since you have a family history, regular checkups are important.')
+    if hypertension == 1:
+        suggestions.append('Manage blood pressure with a low-salt diet and regular monitoring.')
+    if cholesterol > 200:
+        suggestions.append('Reduce cholesterol with a heart-healthy diet and physical activity.')
+    if age > 50:
+        suggestions.append('Schedule regular health screenings for diabetes and related conditions.')
+
     st.write('Lifestyle Suggestions:')
     for s in suggestions:
         st.write(f'- {s}')
