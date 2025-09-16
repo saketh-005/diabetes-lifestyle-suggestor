@@ -1,0 +1,127 @@
+### Improved Project Report: Diabetes Lifestyle Suggestor
+
+#### Objective
+Build a Streamlit web application to predict diabetes risk from patient data and provide personalized lifestyle suggestions, supporting clinical and self-care decision-making. The app will integrate machine learning models for accurate risk prediction and dynamic, user-friendly recommendations based on individual health factors.
+
+#### Workflow
+
+1. **Data Preparation**
+   - **Dataset Utilization**: Leverage a synthetic dataset (`synthetic_amd_federated_dataset.csv`) containing patient demographics, clinical, genetic features, and diabetes outcomes.
+   - **Preprocessing Steps**:
+     - Encode categorical variables using `LabelEncoder`.
+     - Handle missing values appropriately.
+     - Select relevant features for model training.
+
+2. **Model Training**
+   - **Algorithm Selection**: Implement a Random Forest Classifier to predict diabetes risk (binary classification).
+   - **Data Balancing**:
+     - Use `RandomOverSampler` from `imblearn` to address class imbalance.
+   - **Model Evaluation**:
+     - Assess performance using accuracy, ROC AUC, and confusion matrix.
+   - **Model Saving**: Save the trained model as `diabetes_risk_model.pkl` for deployment.
+
+3. **Streamlit App Development**
+   - **User Interface Design**:
+     - Create an interactive sidebar for inputting patient features (Age, BMI, Blood Sugar, etc.).
+     - Display predicted diabetes risk scores.
+   - **Dynamic Suggestions**:
+     - Provide personalized lifestyle recommendations based on the predicted risk increment and individual health factors.
+   - **Integration with Model**: Load the trained model and dataset into the Streamlit app for real-time predictions.
+
+4. **Deployment**
+   - **Hugging Face Spaces Compatibility**: Ensure the application can be hosted on Hugging Face Spaces for public demonstrations.
+   - **Local Execution**: Include instructions to run the app locally using `streamlit run app.py`.
+
+#### Key Features
+- **Accurate Risk Prediction**: Utilize a Random Forest Classifier with oversampling to handle class imbalance and achieve high prediction accuracy.
+- **Personalized Recommendations**: Offer lifestyle suggestions that adjust based on the predicted diabetes risk level and individual health metrics (e.g., BMI, activity, blood sugar).
+- **User-Friendly Interface**: Streamlit app designed for ease of use, allowing patients to input data and receive immediate feedback.
+- **Scalable Architecture**: The application is structured to facilitate easy scaling and deployment using Hugging Face Spaces.
+
+#### Model Training Details
+- **Data Splitting**: 80/20 train-test split with stratified sampling to maintain class distribution.
+- **Feature Selection**: Include clinical, genetic, and lifestyle factors relevant to diabetes risk prediction.
+- **Model Evaluation Metrics**: Accuracy, ROC AUC, and confusion matrix provide comprehensive insights into model performance.
+
+#### Streamlit App Implementation
+```python
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import LabelEncoder
+from imblearn.over_sampling import RandomOverSampler
+import joblib
+from sklearn.metrics import accuracy_score, confusion_matrix, roc_auc_score
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load dataset
+df = pd.read_csv('synthetic_amd_federated_dataset.csv')
+
+# Select features for diabetes risk prediction (example selection)
+features = [
+    'Age', 'BMI', 'Blood_Sugar', 'Triglycerides', 'HbA1c',
+    'Family_History', 'Ethnicity', 'Smoking_Status', 'Alcohol_Level'
+]
+target = 'Diabetes'
+
+# Encode categorical features
+for col in ['Sex', 'Ethnicity', 'Smoking_Status', 'Alcohol_Level']:
+    if df[col].dtype == 'object':
+        df[col] = LabelEncoder().fit_transform(df[col].astype(str))
+
+# Drop rows with missing values in selected columns
+df = df[features + [target]].dropna()
+
+X = df[features]
+y = df[target]
+
+# Train/test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Oversample training data
+ros = RandomOverSampler(random_state=42)
+X_train_res, y_train_res = ros.fit_resample(X_train, y_train)
+
+# Train model
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train_res, y_train_res)
+
+# Save model
+joblib.dump(model, 'diabetes_risk_model.pkl')
+
+print('Classifier trained and saved as diabetes_risk_model.pkl')
+
+# Evaluate model
+y_pred = model.predict(X_test)
+y_prob = model.predict_proba(X_test)[:, 1]
+acc = accuracy_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+roc_auc = roc_auc_score(y_test, y_prob)
+
+print(f'Accuracy: {acc:.3f}')
+print(f'ROC AUC: {roc_auc:.3f}')
+print('Confusion Matrix:')
+print(cm)
+plt.figure(figsize=(5,4))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+plt.title('Confusion Matrix')
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.show()
+```
+
+#### How to Run the Improved Project
+
+1. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Train the Model**
+   ```python
+   python train_model.py
+   ```
+
+3. **Start the Streamlit App**
+   `
